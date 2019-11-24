@@ -26,9 +26,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace espc19FabsAFSess.EventGrid
+namespace FabsAFTrigBindSess.aEventGrid
 {
-    public static class ImageRawToThumb
+    public static class RawImageToThumb
     {
         private static readonly string BLOB_STORAGE_CONNECTION_STRING = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
 
@@ -71,8 +71,7 @@ namespace espc19FabsAFSess.EventGrid
             return encoder;
         }
 
-
-        [FunctionName("ImageRawToThumb")]
+        [FunctionName("RawImageToThumb")]
         public static async Task RunAsync(
             [EventGridTrigger]EventGridEvent eventGridEvent,
             [Blob("{data.url", FileAccess.Read)] Stream input,
