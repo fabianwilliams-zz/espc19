@@ -74,7 +74,7 @@ namespace FabsAFTrigBindSess.aEventGrid
         [FunctionName("RawImageToThumb")]
         public static async Task RunAsync(
             [EventGridTrigger]EventGridEvent eventGridEvent,
-            [Blob("{data.url", FileAccess.Read)] Stream input,
+            [Blob("{data.url}", FileAccess.Read)] Stream input,
             ILogger log)
         {
             log.LogInformation("ESPC19 Session Data from Fabian Williams Session" + eventGridEvent.Data.ToString());
