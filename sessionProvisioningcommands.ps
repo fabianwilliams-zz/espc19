@@ -1,0 +1,47 @@
+#originally sourced and then modified from
+#https://docs.microsoft.com/en-us/azure/storage/blobs/storage-upload-process-images
+
+#Swith to the Subsctiption Group I need
+az account set --subscription REDACTED ID of the subscription i am using
+
+#list subscription to verify
+az account list 
+
+#SetupVariables
+$espcResourceGroupName = "espc19rg"
+echo $espcResourceGroupName
+$blobStorageAccount="espc19stor1"
+echo $blobStorageAccountd
+$appsvcplan = "espc19ServicePlan"
+$webapp="espc19fabswa1"
+
+#create the resource group for my lab
+az group create --name $espcResourceGroupName --location eastus2
+
+#create storage account
+az storage account create --name $blobStorageAccount --location eastus2 --resource-group $espcResourceGroupName --sku Standard_LRS --kind blobstorage --access-tier hot
+
+#create blob storage containers & capture keys
+$blobStorageAccountKey=$(az storage account keys list -g $espcResourceGroupName -n $blobStorageAccount --query [0].value --output tsv)
+az storage container create -n images --account-name $blobStorageAccount --account-key $blobStorageAccountKey --public-access off
+az storage container create -n thumbnails --account-name $blobStorageAccount --account-key $blobStorageAccountKey --public-access container
+echo "Make a note of your Blob storage account key..."
+echo $blobStorageAccountKey
+## REDACT AFTERwards
+wELSBjh96fiFdY/Wz+CjfZpHbadQmXRzHttHXukcCGmEBjTrtEyyHYZYn4S6V0Wdkdfe9BGphukqgtNpTQaKJQ==
+##End of Echo
+
+#create and App Service Plan for our Web App we will use to upload Images to Blob storage
+
+az appservice plan create --name $appsvcplan --resource-group $espcResourceGroupName --sku Free
+
+#create the webapp
+az webapp create --name $webapp --resource-group $espcResourceGroupName --plan $appsvcplan
+
+#deploy the sample Web App that does the work from GitHub
+#this will be without any connectivity to the blog account as we have not put in the app settings for the keys
+az webapp deployment source config --name $webapp --resource-group $espcResourceGroupName --branch master --manual-integration --repo-url https://github.com/fabianwilliams/storage-blob-upload-from-webapp
+
+#add configuration keys to the previosly created app
+az webapp config appsettings set --name $webapp --resource-group $espcResourceGroupName --settings AzureStorageConfig__AccountName=$blobStorageAccount AzureStorageConfig__ImageContainer=images AzureStorageConfig__ThumbnailContainer=thumbnails AzureStorageConfig__AccountKey=$blobStorageAccountKey
+
