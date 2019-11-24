@@ -1,0 +1,3 @@
+﻿Ive already done that here:https://github.com/fabianwilliams/azurefunctionsandcsom
+
+but may do it over here --- unsure

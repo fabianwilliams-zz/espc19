@@ -19,4 +19,7 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="http2queue2TableStor\" />
+  </ItemGroup>
 </Project>
