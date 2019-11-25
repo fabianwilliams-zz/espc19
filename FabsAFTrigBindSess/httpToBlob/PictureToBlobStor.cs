@@ -13,7 +13,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System.Net;
 using System.Net.Http;
 
-namespace FunctWithFabs.http2Blob
+namespace FabsAFTrigBindSess.http2Blob
 {
     //credit for my modivied versioin of this function belongs to fellow MVP Michal Jankowski
     //https://www.jankowskimichal.pl/en/2018/02/azure-function-uploading-photos-to-azure-blob-storage/ 
